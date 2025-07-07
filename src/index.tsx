@@ -30,27 +30,23 @@ app.post('/send-email', async (c) => {
 
 app.post('/send-emails', async (c) => {
   const resend = new Resend((c.env as Env).RESEND_API_KEY)
-
-  // 1. Get the list of customers from the request body.
-  // We expect a JSON object like: { "customers": [{ "email": "...", "name": "..." }] }
   const { customers } = await c.req.json<{ customers: { email: string, name: string }[] }>()
 
   if (!customers || !Array.isArray(customers)) {
     return c.json({ error: 'A list of customers is required.' }, 400)
   }
 
-  // 2. Loop through each customer and create a "promise" to send them an email.
+
   const sendPromises = customers.map(customer => {
     return resend.emails.send({
       from: 'test@sorawiss.com',
       to: customer.email,
-      subject: `🎉 Welcome to the Family, ${customer.name}!`,
+      subject: `🎉 Hello World ${customer.name}!`,
       react: <DefaultEmail name={customer.name} />,
     })
   })
 
-  // 3. Execute all the promises at the same time for better performance.
-  // Promise.all waits for every email to be sent.
+
   try {
     const data = await Promise.all(sendPromises)
     console.log("data", data)
