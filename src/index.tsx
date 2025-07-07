@@ -44,7 +44,7 @@ app.post('/send-emails', async (c) => {
     return resend.emails.send({
       from: 'test@sorawiss.com',
       to: customer.email,
-      subject: `🎉 Welcome to the Family, ${customer.name}!`,
+      subject: `🎉 Hello World ${customer.name}!`,
       react: <DefaultEmail name={customer.name} />,
     })
   })
